@@ -1,0 +1,47 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+
+    <main>
+        <% if (prods && prods.length > 0) { %>  <!-- Check if prods is defined and has items -->
+              <!-- Debugging: Logs the array to the HTML -->
+            <div class="grid">
+                <% for (let product of prods) { %>
+                    <article class="card product-item">
+                        <header class="card__header">
+                            <h1 class="product__title"><%= product.title %></h1>
+                        </header>
+                        <div class="card__image">
+                            <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                        </div>
+                        <div class="card__content">
+                            <h2 class="product__price">$<%= product.price %></h2>
+                            <p class="product__description"><%= product.description %></p>
+                            <p class="product__price">Item Qty: <%= product.cartitems.qty %></p>
+                        </div>
+                        <div class="card__actions">
+                            <form action="/cart" method="post">
+                                <button type="submit" class="btn">+</button>
+                                <input type="hidden" name="productId" value="<%= product.id %>">
+                            </form>
+                            <form action="/delete-item-cart" method="POST">
+                                <input type="hidden" name="productId" value="<%= product.id %>">
+                                <button class="btn" type="submit">X</button>
+                            </form>
+                        </div>
+                    </article>
+                <% } %>
+            </div>
+            <form class="grid" action="/create-order" method="post">
+                <button class="btn " type="submit">Checkout Now</button>
+            </form>
+        <% } else { %>
+            <h1>No Products Found!</h1>
+        <% } %>
+    </main>
+
+    <%- include('../includes/end.ejs') %>
+</body>
